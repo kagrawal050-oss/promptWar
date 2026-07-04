@@ -4,8 +4,8 @@ import React from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
 import { 
-  ChefHat, Sparkles, Plus, Download, LogOut, ChevronRight,
-  Calculator, Activity, ShoppingCart, ListChecks, HelpCircle
+  ChefHat, Sparkles, Plus, Download, ChevronRight,
+  Calculator, Activity, ShoppingCart, ListChecks
 } from 'lucide-react';
 import MealForm from '@/features/planner/components/meal-form';
 import PlanDisplay from '@/features/planner/components/plan-display';
@@ -197,18 +197,19 @@ export default function Dashboard() {
               {/* Main Split Grid */}
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
                 
-                {/* Navigation Sidebar */}
                 <div className="lg:col-span-3 space-y-2 lg:sticky lg:top-24">
-                  {[
-                    { id: 'meals', label: 'Meal Plan', icon: <ChefHat className="w-4 h-4" /> },
-                    { id: 'timeline', label: 'Cooking Timeline', icon: <ListChecks className="w-4 h-4" /> },
-                    { id: 'grocery', label: 'Grocery List', icon: <ShoppingCart className="w-4 h-4" /> },
-                    { id: 'budget', label: 'Budget Feasibility', icon: <Calculator className="w-4 h-4" /> },
-                    { id: 'tips', label: 'Smart AI Tips', icon: <Sparkles className="w-4 h-4" /> }
-                  ].map(tab => (
+                  {(
+                    [
+                      { id: 'meals', label: 'Meal Plan', icon: <ChefHat className="w-4 h-4" /> },
+                      { id: 'timeline', label: 'Cooking Timeline', icon: <ListChecks className="w-4 h-4" /> },
+                      { id: 'grocery', label: 'Grocery List', icon: <ShoppingCart className="w-4 h-4" /> },
+                      { id: 'budget', label: 'Budget Feasibility', icon: <Calculator className="w-4 h-4" /> },
+                      { id: 'tips', label: 'Smart AI Tips', icon: <Sparkles className="w-4 h-4" /> }
+                    ] as const
+                  ).map(tab => (
                     <button
                       key={tab.id}
-                      onClick={() => setActiveTab(tab.id as any)}
+                      onClick={() => setActiveTab(tab.id)}
                       className={`w-full flex items-center justify-between p-3.5 rounded-xl border text-sm font-semibold transition ${
                         activeTab === tab.id
                           ? 'bg-primary border-primary text-primary-foreground shadow-xs'

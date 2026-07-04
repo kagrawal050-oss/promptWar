@@ -23,9 +23,9 @@ const mealFormSchema = z.object({
   cuisinePreference: z.string().min(1, 'Please select a cuisine preference'),
   dietaryPreference: z.enum(['Veg', 'Vegan', 'Eggetarian', 'Non-Veg'] as const),
   allergies: z.array(z.string()),
-  dailyBudget: z.coerce.number().min(1, 'Budget must be at least 1'),
+  dailyBudget: z.number().min(1, 'Budget must be at least 1'),
   currency: z.string().min(1, 'Please select a currency'),
-  familyMembers: z.coerce.number().min(1, 'Must be at least 1').max(20, 'Max 20 members'),
+  familyMembers: z.number().min(1, 'Must be at least 1').max(20, 'Max 20 members'),
   cookingSkill: z.enum(['Beginner', 'Intermediate', 'Expert'] as const),
   cookingTimeAvailable: z.enum(['15 min', '30 min', '45 min', '60+ min'] as const),
   schedule: z.enum(['Busy', 'Normal', 'Free'] as const),
@@ -384,7 +384,7 @@ export default function MealForm({ onSubmit, isLoading }: MealFormProps) {
                     <input
                       type="number"
                       placeholder="e.g. 15"
-                      {...register('dailyBudget')}
+                      {...register('dailyBudget', { valueAsNumber: true })}
                       className="w-full pl-12 pr-4 py-2.5 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium"
                     />
                     <div className="absolute left-4 top-1/2 -translate-y-1/2 font-semibold text-muted-foreground">
@@ -401,7 +401,7 @@ export default function MealForm({ onSubmit, isLoading }: MealFormProps) {
                   <input
                     type="number"
                     placeholder="1"
-                    {...register('familyMembers')}
+                    {...register('familyMembers', { valueAsNumber: true })}
                     className="w-full px-4 py-2.5 rounded-xl border border-border bg-background focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary font-medium"
                   />
                   {errors.familyMembers && (

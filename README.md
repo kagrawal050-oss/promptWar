@@ -1,101 +1,108 @@
-# Cooking To-Do List AI 🍳🤖
+# Culture Compass 🧭
 
-A modern, production-ready Next.js 15 (App Router) micro-application that generates a highly personalized daily cooking schedule, recipe selections, budget feasibility analysis, and smart grocery checklists.
+**Culture Compass** is a modern, lightweight, and responsive GenAI Travel Guide web application built with Next.js 15, React, TypeScript, and Tailwind CSS. It helps users plan their perfect trips by generating mock AI itineraries, storytelling, and an interactive checklist, all based on their budget, destination, travel style, and interests.
 
-## 🚀 Live Demo & Deployment
-This application is fully type-safe, validated using Zod schemas, and optimized for instant, zero-configuration deployments on **Vercel**.
+## Features ✨
+- **Smart Form:** Customize your trip by selecting destination, budget, travel style, and interests.
+- **AI-Powered Itinerary (Mock):** Get a day-by-day plan including top attractions, hidden gems, and local foods.
+- **Storytelling:** Enjoy an engaging AI-generated short story about the selected destination.
+- **Interactive Checklist:** Pre-populated travel essentials categorized by Documents, Clothes, Medicines, and Essentials. Uses `localStorage` to save your progress.
+- **Export Options:** Print or download the travel plan as a PDF natively via the browser.
+- **Responsive UI:** Clean, minimalist, and vibrant design optimized for all devices, including a modern Glassmorphism theme.
+- **Production Ready:** Fully Dockerized and ready to deploy to Google Cloud Run with an automated GitHub Actions pipeline.
 
-## 🛠️ Tech Stack
-- **Framework**: Next.js 15 (App Router)
-- **Language**: TypeScript (Strict type checking)
-- **Styling**: Tailwind CSS v4 & Vanilla CSS custom variables
-- **Form Management**: React Hook Form
-- **Validation**: Zod (Type-safe schemas)
-- **Animations**: Framer Motion
-- **Icons**: Lucide Icons
-- **Formatting & Linting**: ESLint, Prettier
+## Architecture 🏛️
+- **Frontend Framework:** [Next.js 15](https://nextjs.org/) (App Router)
+- **Styling:** [Tailwind CSS](https://tailwindcss.com/)
+- **Language:** TypeScript
+- **State Management:** React Hooks & `localStorage`
+- **Deployment:** Docker & Google Cloud Run
 
----
+## Assumptions & Mocks 🎭
+Since this project requires no actual database or paid AI API keys by default, the GenAI elements (the travel plan, stories, and recommendations) are generated via a mock AI service layer in `lib/services/ai-service.ts`. This allows you to test the full UI without spending API credits.
 
-## 🏗️ Architecture & Folder Layout
-The project uses a feature-based, maintainable directory structure:
+## Setup & Local Development 💻
+
+1. **Clone the repository:**
+   ```bash
+   git clone <repository_url>
+   cd culture-compass
+   ```
+
+2. **Install dependencies:**
+   ```bash
+   npm install
+   ```
+
+3. **Run the development server:**
+   ```bash
+   npm run dev
+   ```
+   Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+
+4. **Build for production:**
+   ```bash
+   npm run build
+   ```
+
+## Docker Commands 🐳
+
+To build and run the application via Docker:
+
+1. **Build the image:**
+   ```bash
+   docker build -t culture-compass .
+   ```
+
+2. **Run the container:**
+   ```bash
+   docker run -p 3000:3000 culture-compass
+   ```
+
+## Google Cloud Run Deployment 🚀
+
+This project includes a `.github/workflows/deploy.yml` file to automate deployment to Google Cloud Run.
+
+### Steps to set up CI/CD:
+1. Create a Google Cloud Project and enable the **Cloud Run** and **Artifact Registry** APIs.
+2. Create a service account with the following roles:
+   - Cloud Run Admin
+   - Service Account User
+   - Artifact Registry Writer
+3. Generate a JSON Key for the service account.
+4. Go to your GitHub repository **Settings > Secrets and variables > Actions**.
+5. Add the following secrets:
+   - `GCP_PROJECT_ID`: Your Google Cloud Project ID.
+   - `GCP_SA_KEY`: The JSON key you generated in step 3.
+   - `GCP_REGION`: The region to deploy to (e.g., `us-central1`).
+   - `GCP_SERVICE_NAME`: The name of your Cloud Run service (e.g., `culture-compass`).
+6. Push changes to the `main` branch to trigger the deployment.
+
+## Repository Structure 📂
+
 ```
-d:/promptWarJune26/
-├── app/                          # Next.js App Router (Layouts & Pages)
-│   ├── layout.tsx                # Root layout (Google Fonts Inter/Outfit)
-│   ├── page.tsx                  # Animated Landing Page
-│   ├── dashboard/                # Main Application Container
-│   └── globals.css               # Apple-inspired CSS tokens & resets
-├── components/                   # Shared UI Components
-│   └── ui/                       # Design System Elements
-├── features/                     # Feature-based folder layout
-│   └── planner/                  # Cooking Planner modules
-│       ├── components/           # Forms, Recipies, Grocery, Schedule, and Tips
-│       ├── hooks/                # useMealPlan logic with fake AI loaders
-│       └── services/             # Recipe DB and Rules-based AI Planner engine
-├── hooks/                        # Custom reusable React hooks
-│   └── use-local-storage.ts      # SSR-safe localStorage syncing hook
-├── lib/                          # Constants & helpers
-│   ├── utils.ts                  # cn class merger
-│   └── constants.ts              # Dropdown selections & ingredient pools
-├── types/                        # TypeScript typings
-│   └── index.ts                  # Declarations for recipes and configurations
-└── utils/                        # Utility functions
-    └── pdf-export.ts             # Dynamic Print & PDF Exporter script
+culture-compass/
+├── .github/
+│   └── workflows/          # CI/CD pipelines
+├── app/                    # Next.js 15 App Router pages and layout
+│   ├── globals.css         # Tailwind global styles
+│   ├── layout.tsx          # Root layout
+│   ├── page.tsx            # Home/Landing page
+│   ├── planner/            # Planner form page
+│   └── plan/               # Results display page
+├── components/             # Reusable UI components
+│   ├── planner/            # Form components
+│   ├── plan/               # Checklist and result components
+│   └── ui/                 # Core UI building blocks (Buttons, Cards, etc.)
+├── lib/
+│   ├── services/           # Mock AI Service layer
+│   └── utils.ts            # Utility functions (Tailwind class merging)
+├── public/                 # Static assets
+├── .env.example            # Environment variables template
+├── .dockerignore           # Docker ignore rules
+├── Dockerfile              # Multi-stage Docker build config
+├── next.config.ts          # Next.js configuration (standalone output enabled)
+├── package.json            # Project dependencies and scripts
+├── tailwind.config.ts      # Tailwind CSS configuration
+└── tsconfig.json           # TypeScript configuration
 ```
-
----
-
-## 🧠 Rules-Based AI Planner Service
-To remain modular and ready for external LLM integrations, the core logic is isolated in a dedicated service layer: `features/planner/services/ai-service.ts`.
-1. **Constraint Filters**: Removes recipes containing ingredients mapped to user-specified food allergies.
-2. **Score-based Matchmaker**: Ranks recipe candidates by scoring cuisine preference, daily timeline limits, and available ingredients.
-3. **Budget Calibration**:
-   - Calculates the cost of raw ingredients scaled to family size.
-   - Compares total cost against the user's spending limit.
-   - If **Over Budget**, it automatically swaps premium ingredients for cheaper alternatives (e.g., *Broccoli &rarr; Cauliflower*, *Greek Yogurt &rarr; Curd*) or selects budget-friendly recipes (e.g. Lentils or soups) to trim costs.
-4. **Smart Grocery Checklist**: Compiles required recipe items, filters out kitchen ingredients checked as "already at home", and groups the rest by category (Dairy, Protein, Vegetables, Grains, etc.).
-5. **Timeline Scheduler**: Dynamically structures breakfast, lunch, and dinner cooking times based on the user's schedule limits (Busy, Normal, Free).
-
----
-
-## 💻 Local Setup & Running
-
-Follow these simple steps to run the application locally:
-
-### 1. Install Dependencies
-Run the install command:
-```bash
-npm install
-```
-
-### 2. Configure Environment Variables
-Create a local `.env` file from the example:
-```bash
-cp .env.example .env
-```
-
-### 3. Run Development Server
-Start the development server:
-```bash
-npm run dev
-```
-Open [http://localhost:3000](http://localhost:3000) in your browser.
-
----
-
-## ⚡ Vercel Deployment
-Deploying to Vercel is seamless:
-1. Push this repository to GitHub/GitLab.
-2. Connect your repository to **Vercel**.
-3. Vercel automatically detects Next.js configurations and builds the production bundle immediately.
-
----
-
-## 🔮 Future Enhancements
-- **LLM Integration**: Swap the local rules-based engine with an active OpenAI GPT-4o or Gemini 1.5 Flash API connector to allow free-form custom recipe text generation.
-- **OCR Pantry Scanner**: Allow users to snap a photo of their fridge shelf to auto-fill the available ingredients list.
-- **Shopping Cart Sync**: Connect the grocery list with APIs like Instacart or Amazon Fresh to purchase ingredients with a single click.
-
-## 📄 License
-This project is open-source and licensed under the MIT License.
